@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timed Audio Message</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #timer {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        #audioMessage {
+            display: none;
+            margin-top: 20px;
+        }
+        audio {
+            width: 100%;
+            max-width: 400px;
+        }
+        p {
+            font-size: 18px;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <h1>Audio Message</h1>
+    <div id="timer"></div>
+    <div id="audioMessage">
+        <p>Your audio message is ready!</p>
+        <audio controls>
+            <source src="audio.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+    <script>
+        // Set the unlock time (start) and expiration time (end)
+        const unlockTime = new Date('2024-12-28T12:00:00').getTime(); // Change to your desired time
+        const expirationTime = unlockTime + (2 * 24 * 60 * 60 * 1000); // Accessible for 2 days (in milliseconds)
+
+        const timerDiv = document.getElementById('timer');
+        const audioDiv = document.getElementById('audioMessage');
+
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+
+            if (now < unlockTime) {
+                const distance = unlockTime - now;
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                timerDiv.innerText = Time Remaining: ${days}d ${hours}h ${minutes}m ${seconds}s;
+            } else if (now < expirationTime) {
+                clearInterval(interval);
+                timerDiv.style.display = 'none';
+                audioDiv.style.display = 'block';
+            } else {
+                clearInterval(interval);
+                timerDiv.innerText = 'This message is no longer available.';
+                audioDiv.style.display = 'none';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
